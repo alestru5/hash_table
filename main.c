@@ -7,8 +7,11 @@
 #include "menu.h"
 int main() {
     Table board = {NULL, N, 0};
+    if (init(&board) == 0){
+	return 0;
+    }
     int num_func;
-    int (*fptr[])(Table *) = {NULL, Add, Find, Delete, CleanShow, DirtyShow, Reorg};
+    int (*fptr[])(Table *) = {NULL, Add, NULL, NULL, CleanShow, NULL, NULL};
     while(num_func = menu()){
         if (!fptr[num_func](&board)){
             break;

@@ -1,8 +1,9 @@
 #ifndef TABLE_H
 #define TABLE_H
+int init(Table *board);
 int count_rel(Table *board, char *key);
-char *hash1(char *str);
-char *hash2(char *str);
+int hash1(char *str, Table *board);
+int hash2(char *str, Table *board);
 int Add(Table *board);
 int Find(Table *board);
 int Delete(Table *board);

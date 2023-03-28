@@ -14,6 +14,5 @@ typedef struct KeySpace{
 typedef struct Table{
     KeySpace *ks;
     int msize;
-    int csize;
 }Table;
 #endif

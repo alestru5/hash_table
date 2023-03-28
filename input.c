@@ -2,6 +2,22 @@
 #include <stdlib.h>
 #include <string.h>
 #include "input.h"
+int prost(int a){
+    int c = a;
+    while (1){
+	int f = 1;
+	for (int i = 2; i<c; i++){
+	    if (c % i == 0){
+		f = 0;
+		break;
+	    }
+	}
+	if (f){
+	    return c;
+	}
+	c += 1;
+    }
+}
 char *getStr(){
     char *ans = malloc(sizeof(char));
     char n;
