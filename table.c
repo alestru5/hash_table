@@ -39,7 +39,7 @@ int hash2(char *str, Table *board) {
     for (int j = 0; str[j]; j++){
         i += str[j];
     }
-    return prost(i % board->msize)%board->msize;
+    return i % (board->msize - 1) + 1;
 }
 int Add(Table *board){
     printf("Введите ключ элемента:\n");
@@ -49,7 +49,8 @@ int Add(Table *board){
     int i = 0;
     int r = 1;
     while (i < board->msize){
-	int h = hash1(key, board) + i * hash2(key, board);
+	int h = (hash1(key, board) + i * hash2(key, board))%board->msize;
+	printf("%d", h);
 	if (board->ks[h].busy == 0){
 	    board->ks[h].info = malloc(sizeof(Item));
             board->ks[h].info->element = el;
@@ -117,26 +118,26 @@ int CleanShow(Table *board){
     for (int i = 0; i < board->msize; i++){
         if (board->ks[i].busy != 0) {
             f = 0;
-            printf("ind: %d busy: %d key: %s release: %d element: %s\n", i, board->ks[i].busy, board->ks[i].key,
-                   board->ks[i].release, board->ks[i].info->element);
+            printf("ind: %d busy: %d key: %s release: %d element: %s\n", i, board->ks[i].busy, board->ks[i].key, board->ks[i].release, board->ks[i].info->element);
         }
     }
     if (f){
         printf("Таблица пустая.\n");
     }
     return 1;
-}/*
+}
 int DirtyShow(Table *board){
-    if (board->csize == 0){
-        printf("Таблица пустая.\n");
-        return 1;
+    int f = 1;
+    for (int i = 0; i < board->msize; i++){
+        f = 0;
+	if (board->ks[i].info)
+            printf("ind: %d busy: %d key: %s release: %d element: %s\n", i, board->ks[i].busy, board->ks[i].key, board->ks[i].release, board->ks[i].info->element);
     }
-    for (int i = 0; i < board->csize; i++){
-        printf("busy: %d key: %s release: %d element: %s\n", board->ks[i].busy, board->ks[i].key,
-               board->ks[i].release, board->ks[i].info->element);
+    if (f){
+        printf("Таблица пустая.\n");
     }
     return 1;
-}
+}/*
 int Reorg(Table *board){
     int i = 0;
     while (i < board->csize){
