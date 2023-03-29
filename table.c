@@ -14,9 +14,6 @@ int init(Table *board){
     printf("Выделено памяти на %d элементов.\n", len);
     board->ks = calloc(len, sizeof(KeySpace));
     board->msize = len;
-    /*for (int i = 0; i < board->msize; i++){
-	board->ks[i].info = malloc(sizeof(Item));
-        board->ks[i].info->element = (sizeof(char*));*/
     return 1;
 }
 /*int count_rel(Table *board, char *key){
@@ -29,8 +26,14 @@ int init(Table *board){
 }*/
 int hash1(char *str, Table *board){
     int i = 0;
+    for (int j = 0; j < strlen(str) / 3; j++){
+	i += str[j] * 3;
+    }
+    for (int j = 0; j < strlen(str)/2; j++){
+        i += str[j] * 2;
+    }
     for (int j = 0; str[j]; j++){
-	i += str[j];
+        i += str[j];
     }
     return i % board->msize;
 }
@@ -50,7 +53,6 @@ int Add(Table *board){
     int r = 1;
     while (i < board->msize){
 	int h = (hash1(key, board) + i * hash2(key, board))%board->msize;
-	printf("%d", h);
 	if (board->ks[h].busy == 0){
 	    board->ks[h].info = malloc(sizeof(Item));
             board->ks[h].info->element = el;
@@ -68,28 +70,25 @@ int Add(Table *board){
     free(key);
     free(el);
     return 1;
-}/*
+}
 int Find(Table *board){
-    printf("Введите элемент, который хотите увидеть:\n");
-    char *el = getStr();
-    char *h1 = hash1(el);
-    char *h2 = hash2(h1);
-    int f = 1;
-    for (int i = 0; i < board->csize; i++){
-        if ((strcmp(board->ks[i].key, h1) == 0 || strcmp(board->ks[i].key, h2) == 0) && board->ks[i].busy != 0){
-            printf("busy: %d key: %s release: %d element: %s\n", board->ks[i].busy, board->ks[i].key,
-                   board->ks[i].release, board->ks[i].info->element);
-            f = 0;
-        }
+    printf("Введите ключ элемента, которого хотите увидеть:\n");
+    char *key = getStr();
+    int f = 1, i = 0;
+    while (i < board->msize){
+	int h = (hash1(key, board) + i * hash2(key, board))%board->msize;
+	if (strcmp(board->ks[h].key, key) == 0 && board->ks[h].busy == 1){
+	    f = 0;
+	    printf("ind: %d busy: %d key: %s release: %d element: %s\n", i, board->ks[i].busy, board->ks[i].key, board->ks[i].release, board->ks[i].info->element);
+	}
+	i += 1;
     }
     if (f){
         printf("Такого ключа не существует.\n");
     }
-    free(el);
-    free(h1);
-    free(h2);
+    free(key);
     return 1;
-}
+}/*
 int Delete(Table *board){
     printf("Введите удаляемый элемент:\n");
     char *el = getStr();
@@ -129,9 +128,10 @@ int CleanShow(Table *board){
 int DirtyShow(Table *board){
     int f = 1;
     for (int i = 0; i < board->msize; i++){
-        f = 0;
-	if (board->ks[i].info)
+	if (board->ks[i].info){
             printf("ind: %d busy: %d key: %s release: %d element: %s\n", i, board->ks[i].busy, board->ks[i].key, board->ks[i].release, board->ks[i].info->element);
+	    f = 0;
+	}
     }
     if (f){
         printf("Таблица пустая.\n");

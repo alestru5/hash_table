@@ -5,6 +5,7 @@ table:
 	gcc -c table.c
 	ar cr libtable.a table.o
 	gcc -w main.o input.o menu.o -o a.out -L. -ltable
+	valgrind ./a.out
 clean:
 	rm *.o
 	rm *.a

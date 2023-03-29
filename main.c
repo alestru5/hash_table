@@ -11,7 +11,7 @@ int main() {
 	return 0;
     }
     int num_func;
-    int (*fptr[])(Table *) = {NULL, Add, NULL, NULL, CleanShow, DirtyShow, NULL};
+    int (*fptr[])(Table *) = {NULL, Add, Find, NULL, CleanShow, DirtyShow, NULL};
     while(num_func = menu()){
         if (!fptr[num_func](&board)){
             break;
